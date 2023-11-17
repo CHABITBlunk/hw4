@@ -59,32 +59,107 @@ public class BinaryTree implements TreeStructure {
     root = insertHelper(root, num);
   }
 
-  private TreeNode insertHelper(Node root, Integer key) {
+  private TreeNode insertHelper(TreeNode root, Integer key) {
     if (root == null) {
-      root = new TreeNode(num);
+      root = new TreeNode(key);
       return root;
-    } else if (root.key > num) {
+    } else if (root.key > key) {
       root.left = insertHelper(root.left, key);
-    } else if (root.key < num) {
+    } else if (root.key < key) {
       root.right = insertHelper(root.right, key);
     }
     return root;
   }
 
-  public Boolean remove() {
+  public Boolean remove(Integer key) {
+    if (removeHelper(root, key) != null)
+      return true;
     return false;
   }
 
+  private TreeNode removeHelper(TreeNode root, Integer key) {
+    if (root == null)
+      return root;
+    if (root.key > key) {
+      root.left = removeHelper(root.left, key);
+      return root;
+    } else if (root.key < key) {
+      root.right = removeHelper(root.right, key);
+      return root;
+    }
+
+    if (root.left == null) {
+      TreeNode temp = root.right;
+      return temp;
+    } else if (root.right == null) {
+      TreeNode temp = root.left;
+      return temp;
+    } else {
+      TreeNode succParent = root;
+      TreeNode succ = root.right;
+      while (succ.left != null) {
+        succParent = succ;
+        succ = succ.left;
+      }
+      if (succParent != root)
+        succParent.left = succ.right;
+      else
+        succParent.right = succ.right;
+      root.key = succ.key;
+      return root;
+    }
+  }
+
   public Long get(Integer num) {
-    return 0;
+    return getHelper(root, num);
+  }
+
+  public Long getHelper(TreeNode root, Integer num) {
+    if (root.key != num) {
+      if (root.key > num) {
+        return getHelper(root.left, num);
+      }
+      if (root.key < num) {
+        return getHelper(root.right, num);
+      }
+    } else {
+      return (Long) root.key;
+    }
+    return -1;
   }
 
   public Integer findMaxDepth() {
-    return 0;
+    return maxDepthHelper(root);
+  }
+
+  public Integer maxDepthHelper(TreeNode root) {
+    if (root == null) {
+      return 0;
+    } else {
+      int leftDepth = maxDepthHelper(root.left);
+      int rightDepth = maxDepthHelper(root.right);
+      if (leftDepth > rightDepth)
+        return leftDepth + 1;
+      else if (leftDepth < rightDepth)
+        return rightDepth + 1;
+    }
   }
 
   public Integer findMinDepth() {
-    return 0;
+    return minDepthHelper(root);
+  }
+
+  public Integer minDepthHelper(TreeNode root) {
+    if (root == null) {
+      return 0;
+    } else {
+      int leftDepth = minDepthHelper(root.left);
+      int rightDepth = minDepthHelper(root.right);
+      if (leftDepth < rightDepth)
+        return leftDepth + 1;
+      else if (leftDepth > rightDepth)
+        return rightDepth + 1;
+    }
   }
 
 }
