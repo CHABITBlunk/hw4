@@ -8,10 +8,12 @@ public class BinaryTree implements TreeStructure {
 
   class TreeNode {
     Integer key;
+    Long timeInserted;
     TreeNode left, right;
 
-    public TreeNode(Integer item) {
-      key = item;
+    public TreeNode(Integer key, Long timeInserted) {
+      this.key = key;
+      this.timeInserted = timeInserted;
       left = right = null;
     }
   }
@@ -23,7 +25,7 @@ public class BinaryTree implements TreeStructure {
   }
 
   public BinaryTree(Integer value) {
-    root = new TreeNode(value);
+    root = new TreeNode(value, System.nanoTime());
   }
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -61,7 +63,7 @@ public class BinaryTree implements TreeStructure {
 
   private TreeNode insertHelper(TreeNode root, Integer key) {
     if (root == null) {
-      root = new TreeNode(key);
+      root = new TreeNode(key, System.nanoTime());
       return root;
     } else if (root.key > key) {
       root.left = insertHelper(root.left, key);
@@ -123,9 +125,9 @@ public class BinaryTree implements TreeStructure {
         return getHelper(root.right, num);
       }
     } else {
-      return (Long) root.key;
+      return root.timeInserted;
     }
-    return -1;
+    return Long.MIN_VALUE;
   }
 
   public Integer findMaxDepth() {
@@ -133,16 +135,15 @@ public class BinaryTree implements TreeStructure {
   }
 
   public Integer maxDepthHelper(TreeNode root) {
-    if (root == null) {
-      return 0;
-    } else {
+    if (root != null) {
       int leftDepth = maxDepthHelper(root.left);
       int rightDepth = maxDepthHelper(root.right);
       if (leftDepth > rightDepth)
         return leftDepth + 1;
-      else if (leftDepth < rightDepth)
+      else
         return rightDepth + 1;
     }
+    return 0;
   }
 
   public Integer findMinDepth() {
@@ -150,16 +151,15 @@ public class BinaryTree implements TreeStructure {
   }
 
   public Integer minDepthHelper(TreeNode root) {
-    if (root == null) {
-      return 0;
-    } else {
+    if (root != null) {
       int leftDepth = minDepthHelper(root.left);
       int rightDepth = minDepthHelper(root.right);
       if (leftDepth < rightDepth)
         return leftDepth + 1;
-      else if (leftDepth > rightDepth)
+      else
         return rightDepth + 1;
     }
+    return 0;
   }
 
 }

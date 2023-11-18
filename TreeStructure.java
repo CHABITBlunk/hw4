@@ -2,9 +2,9 @@ package cs250.hw4;
 
 public interface TreeStructure {
 
-  public void insert(Integer num); 
+  public void insert(Integer num);
 
-  public Boolean remove();
+  public Boolean remove(Integer key);
 
   public Long get(Integer num);
 
